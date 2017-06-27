@@ -1,0 +1,121 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+...
+
+```{r}
+rm(list=ls())
+library(rvest)
+library(ggplot2)
+
+url_ajps <- "https://scholar.google.de/scholar?as_q=&as_epq=&as_oq=&as_eq=&as_occt=any&as_sauthors=&as_publication=American+Journal+of+Political+Science&as_ylo=2000&as_yhi=2017&btnG=&hl=en&as_sdt=0%2C5"
+
+page_ajps <- read_html(url_ajps)
+
+library(stringr)
+citations <- page_ajps %>% 
+  html_nodes (".gs_fl > a:nth-child(1)") %>% 
+  html_text() %>%
+  str_extract("\\d\\d\\d\\d\\d|\\d\\d\\d\\d|\\d\\d\\d|\\d\\d|\\d") 
+  # str_extract("%04d")
+
+# citations1 <- sprintf("%03d", citations)
+citations
+
+
+titles <- page_ajps %>% 
+  html_nodes (".gs_rt") %>% 
+  html_text()
+
+links <- page_ajps %>% 
+  html_nodes (".gs_fl > a:nth-child(1)") %>%
+  html_attr("href")
+
+author <- page_ajps %>% 
+  html_nodes (".gs_a") %>%   html_text()
+
+
+
+dt <- data.frame(titles, author, citations, links)
+library(dplyr)
+glimpse(dt)
+head(dt)
+```
+
+
+```{r}
+
+url_ajps <- "https://scholar.google.de/scholar?as_q=&as_epq=&as_oq=&as_eq=&as_occt=any&as_sauthors=&as_publication=American+Journal+of+Political+Science&as_ylo=2000&as_yhi=2017&btnG=&hl=en&as_sdt=0%2C5"
+"https://scholar.google.de/scholar?start=10&hl=en&as_publication=American+Journal+of+Political+Science&as_sdt=0,5&as_ylo=2000&as_yhi=2017"
+  library(stringr)
+str_scrape_journal <- function(url){
+  
+  # read file
+  page_ajps <- read_html(url)
+  
+  # extract amount citations
+  citations <- page_ajps %>% 
+    html_nodes (".gs_fl > a:nth-child(1)") %>% 
+    html_text() %>%
+    str_extract("\\d\\d\\d\\d\\d|\\d\\d\\d\\d|\\d\\d\\d|\\d\\d|\\d")   # citations1 <- sprintf("%03d", citations)
+  
+  # extract titles
+  titles <- page_ajps %>% 
+    html_nodes (".gs_rt") %>% 
+    html_text()
+  
+  # ectract links
+  links <- page_ajps %>% 
+    html_nodes (".gs_fl > a:nth-child(1)") %>%
+    html_attr("href")
+  
+  # ectract authors
+  author <- page_ajps %>% 
+    html_nodes (".gs_a") %>%   
+    html_text()
+  
+  # gather data
+  dt <- data.frame(titles, author, citations, links)
+  
+  return(dt)
+}
+
+dt <- str_scrape_journal(url_ajps)
+glimpse(dt)
+```
+
+
+
+```{r}
+s <- seq(00,1300, by = 10)
+index_page <- sprintf("%02d", s)
+
+links_page <- paste("https://scholar.google.de/scholar?start=", index_page, "&hl=en&as_publication=American+Journal+of+Political+Science&as_sdt=0,5&as_ylo=2000&as_yhi=2017", sep = "")
+
+articles <- list()
+pb <- txtProgressBar(min = 0, max = length(index_page), style = 3)
+for(jj in seq_along(links_page)){
+    tryCatch({ 
+    articles[[jj]] <- str_scrape_journal(links_page[jj])
+  }, error = function(e) {
+    message("no file found!")
+    message(e)
+    cat('\n')
+  }, finally = {
+    setTxtProgressBar(pb, jj)
+  })
+}
+close(pb)
+
+
+
+str(articles)
+
+
+library(data.table)
+articles1 <- do.call(rbind, articles)
+articles1
+```
+
