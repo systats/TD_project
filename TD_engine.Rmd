@@ -184,7 +184,11 @@ data2<-doc[[2]]
 
 
 
-Randomize search queries. Search for unimportant topics sequentially. 
+* Randomize search queries. Search for unimportant topics sequentially. 
+* Increase elements per site 20 instead of 10
+* Small time intervals to get most of the search results
+* change 00-40-80...
+
 
 ```{r}
 set.seed(123)
@@ -241,6 +245,8 @@ rep(index_page1, each = 10)
 
 # save(articles1, file = "sample_data.Rdata")
 ```
+
+
 
 ## average amount of new citations
 
