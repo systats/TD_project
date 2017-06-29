@@ -16,7 +16,7 @@ rm(list=ls())
 library(rvest)
 library(ggplot2)
 
-url_ajps <- "https://scholar.google.de/scholar?as_q=&as_epq=&as_oq=&as_eq=&as_occt=any&as_sauthors=&as_publication=American+Journal+of+Political+Science&as_ylo=2000&as_yhi=2017&btnG=&hl=en&as_sdt=0%2C5"
+url_ajps <- "https://scholar.google.de/scholar?as_q=&as_epq=&as_oq=&as_eq=&as_occt=any&as_sauthors=&num=20&as_publication=American+Journal+of+Political+Science&as_ylo=2000&as_yhi=2017&btnG=&hl=en&as_sdt=0%2C5"
 
 # "https://scholar.google.de/scholar?start=10&hl=en&as_publication=American+Journal+of+Political+Science&as_sdt=0,5&as_ylo=2000&as_yhi=2017"
 
