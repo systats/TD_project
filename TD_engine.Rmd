@@ -184,7 +184,7 @@ data2<-doc[[2]]
 
 
 
-
+Randomize search queries. Search for unimportant topics sequentially. 
 
 ```{r}
 set.seed(123)
