@@ -1,5 +1,7 @@
 ---
 title: "Meta-Analysis"
+author: "Ben Guinaudeau & Simon Roth"
+date: "*last updated:* `r Sys.Date()`"
 output: html_notebook
 ---
 
@@ -10,6 +12,7 @@ This is a brief explanation of Ben and my work. We try to collect all relevant d
 
 # Code
 
+## Google Scholar Micro Scraper
 
 ```{r}
 rm(list=ls())
@@ -81,12 +84,9 @@ dt$authors
 ```
 
 
+# Cheating Functions
 
-[`httr` vignette](https://cran.r-project.org/web/packages/httr/vignettes/quickstart.html)
-
-There is also a package called [`iptools`](https://cran.r-project.org/web/packages/iptools/iptools.pdf)
-
-
+## Time Delay
 ```{r}
 # devtools::install_github("hadley/httr")
 # install.packages(c("curl","httr"))
@@ -103,7 +103,11 @@ time_delay <- function(mean_delay = 5, sd_delay = 1){
   ### Now wait just a sec...
   Sys.sleep(delay)
 }
+```
 
+
+## Change IP address
+```{r}
 rotate_ip <- function(){
   new_proxy <- "https://www.us-proxy.org/"
   # read file
@@ -126,7 +130,12 @@ rotate_ip <- function(){
   
   Sys.setenv(http_proxy = proxyName) #set environemental variable
 }
+```
 
+
+## Scrape online political dict and fire on google
+
+```{r}
 pol_dict_search <- function(){
   #n_search <- sample(2:10, 1)
   search_letter <- sample(letters, 1)
@@ -153,7 +162,11 @@ pol_dict_search <- function(){
 }
 
 pol_dict_search()
+```
 
+
+## Dictionary (data-base) search queries
+```{r}
 ### 1.) random stop words based
 random_search1 <- function(){
   n_search <- sample(2:10, 1)
@@ -212,6 +225,8 @@ random_search3 <- function(){
 random_search3()
 ```
 
+## Change user agent identification
+
 ```{r}
 # # Approach #2 (Less Polite)
 #  - Identify Yourself Differently -
@@ -264,8 +279,7 @@ while(ua < 1000) {
 ```
 
 
-[RSelenium](https://cran.r-project.org/web/packages/RSelenium/vignettes/RSelenium-saucelabs.html)
-
+## Other ideas
 
 * Randomize search queries. Search for unimportant topics sequentially. 
 * Increase elements per site 20 instead of 10
@@ -273,18 +287,24 @@ while(ua < 1000) {
 * change 00-20-40...
 * max: 420-450 search hits (# 68%) oder 44 iterations with random_search3.
 
-## Alternativ citation source
+
+### Packages 
+
+* [RSelenium](https://cran.r-project.org/web/packages/RSelenium/vignettes/RSelenium-saucelabs.html)
+* [`httr` vignette](https://cran.r-project.org/web/packages/httr/vignettes/quickstart.html)
+* There is also a package called [`iptools`](https://cran.r-project.org/web/packages/iptools/iptools.pdf)
+
+
+
+
+### Alternativ citation source
 
 * [crossref](https://support.crossref.org/hc/en-us/articles/213534146-Cited-by-overview)
-*
-
-
-## google api explorer
 * https://developers.google.com/apis-explorer/?csw=1#p/
 
 
 
-## Journal Ranking from 
+### Journal Ranking from 
 
 [scimagojr](http://www.scimagojr.com/journalrank.php?category=3312)
 
@@ -293,13 +313,11 @@ while(ua < 1000) {
 ```{r}
 library(haven)
 # install.packages("xlsx")
-
-
+jrankings <- read.csv("journal_ranking_2016.csv", header = T, sep = ";")
+glimpse(jrankings)
 ```
 
-
-
-
+# Scrape Google
 
 ```{r}
 closeAllConnections()
@@ -371,7 +389,7 @@ articles2
 ```
 
 
-
+# Explore Results
 ## average amount of new citations
 
 ```{r, echo = T, results = "asis", message = F, warnings = F}
